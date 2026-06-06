@@ -91,6 +91,8 @@ namespace Bored_But_Broke_back_end
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
+                options.LoginPath = "/api/auth/login";
+                options.LogoutPath = "/api/auth/logout";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.ExpireTimeSpan = TimeSpan.FromDays(7);
