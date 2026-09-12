@@ -1,8 +1,4 @@
-﻿@using BoredButBrokeFE.Auth
-@inject UserCookieContainer CookieContainer
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -29,20 +25,7 @@
     <script src="facts.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/mapInterop.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 
 </html>
-
-@code {
-    protected override void OnInitialized()
-    {
-        var context = HttpContextAccessor.HttpContext;
-        if (context is not null)
-        {
-            if (context.Request.Headers.TryGetValue("Cookie", out var cookie))
-            {
-                CookieContainer.CookieHeader = cookie.ToString();
-            }
-        }
-    }
-}

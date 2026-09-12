@@ -5,7 +5,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager NavigationManager
-@inject CookieAuthStateProvider AuthStateProvider
+@inject IJSRuntime JS
 
 <PageTitle>Sign In | Bored But Broke</PageTitle>
 <HeadContent>
@@ -146,19 +146,21 @@
                 Password = loginModel.Password
             };
 
-            var client = HttpClientFactory.CreateClient("BBBBackEnd");
-            var response = await client.PostAsJsonAsync("api/auth/login", loginRequest);
+            var status = await JS.InvokeAsync<int>("accountApi.post", "/account/login", loginRequest);
 
-            if (response.IsSuccessStatusCode)
+            if (status == (int)System.Net.HttpStatusCode.OK)
             {
-                AuthStateProvider.NotifyUserLoggedIn();
                 SuccessMessage = "Login successful! Redirecting to the home page...";
                 await Task.Delay(500);
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/", forceLoad: true);
             }
-            else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            else if (status == (int)System.Net.HttpStatusCode.TooManyRequests)
             {
                 Errors.Add("Account locked. Try again later.");
+            }
+            else if (status == 0 || status >= 500)
+            {
+                Errors.Add("Could not reach the server. Please try again.");
             }
             else
             {

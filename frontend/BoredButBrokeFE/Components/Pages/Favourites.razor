@@ -1,11 +1,12 @@
 ﻿@page "/favourites"
 @attribute [Authorize]
-@inject IHttpClientFactory HttpClientFactory
+@inject BackendClient Backend
 @inject NavigationManager Navigation
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using Microsoft.AspNetCore.Authorization
+@using BoredButBrokeFE.Auth
 
 <PageTitle>Favourites</PageTitle>
 
@@ -157,7 +158,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        var Http = await Backend.CreateClientAsync();
         var response = await Http.GetAsync("api/favourites");
         var responseBody = await response.Content.ReadAsStringAsync();
 

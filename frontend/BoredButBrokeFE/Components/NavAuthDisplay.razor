@@ -1,7 +1,6 @@
 ﻿@using BoredButBrokeFE.Auth
 @using Microsoft.AspNetCore.Components.Authorization
-@inject IHttpClientFactory HttpClientFactory
-@inject CookieAuthStateProvider AuthStateProvider
+@inject IJSRuntime JS
 @inject NavigationManager Nav
 
 <AuthorizeView>
@@ -24,10 +23,8 @@
 @code {
     private async Task HandleLogout()
     {
-        var client = HttpClientFactory.CreateClient("BBBBackEnd");
-        await client.PostAsync("api/auth/logout", null);
+        await JS.InvokeAsync<int>("accountApi.post", "/account/logout");
 
-        AuthStateProvider.NotifyUserLoggedOut();
         Nav.NavigateTo("/", forceLoad: true);
     }
 }

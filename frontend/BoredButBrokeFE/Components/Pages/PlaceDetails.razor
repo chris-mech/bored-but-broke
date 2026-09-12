@@ -3,7 +3,7 @@
 @using BoredButBrokeFE.Auth
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
-@inject IHttpClientFactory HttpClientFactory
+@inject BackendClient Backend
 @inject IJSRuntime JS
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -144,7 +144,7 @@ else
     private Place? place;
 
     [Inject] 
-    private CookieAuthStateProvider authStateProvider { get; set; }
+    private AuthenticationStateProvider authStateProvider { get; set; }
 
     private bool error = false;
     private bool isFavourited = false;
@@ -152,7 +152,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        var Http = await Backend.CreateClientAsync();
         try
         {
             place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
@@ -188,7 +188,7 @@ else
             return;
         }
 
-        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        var Http = await Backend.CreateClientAsync();
 
         if (isFavourited)
         {

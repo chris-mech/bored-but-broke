@@ -20,18 +20,14 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ThemeService>();
 
-builder.Services.AddScoped<UserCookieContainer>();
-builder.Services.AddScoped<CookieAuthStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
-    sp.GetRequiredService<CookieAuthStateProvider>());
+builder.Services.AddScoped<BackendClient>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient("BBBBackEnd", client =>
     client.BaseAddress = new Uri("https://localhost:7141/"))
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
-        UseCookies = true,
-        CookieContainer = new System.Net.CookieContainer(),
+        UseCookies = false,
         AllowAutoRedirect = false
     });
 
@@ -53,6 +49,8 @@ app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapAccountEndpoints();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
