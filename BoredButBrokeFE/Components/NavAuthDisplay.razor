@@ -28,6 +28,6 @@
         await client.PostAsync("api/auth/logout", null);
 
         AuthStateProvider.NotifyUserLoggedOut();
-        Nav.NavigateTo("/");
+        Nav.NavigateTo("/", forceLoad: true);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 
@@ -41,6 +42,7 @@ namespace BoredButBrokeFE.Auth
         }
         public void NotifyUserLoggedOut()
         {
+            _cookieContainer.CookieHeader = null;
             NotifyAuthenticationStateChanged(Task.FromResult(_loggedOut));
         }
         private async Task<AuthenticationState> FetchAuthStateAsync()
@@ -57,10 +59,18 @@ namespace BoredButBrokeFE.Auth
 
                 var response = await client.SendAsync(request);
 
-                if (!response.IsSuccessStatusCode) return _loggedOut;
+                if (!response.IsSuccessStatusCode)
+                {
+                    _cookieContainer.CookieHeader = null;
+                    return _loggedOut;
+                }
 
                 var user = await response.Content.ReadFromJsonAsync<UserInfo>();
-                if (user is null) return _loggedOut;
+                if (user is null)
+                {
+                    _cookieContainer.CookieHeader = null;
+                    return _loggedOut;
+                }
 
                 var claims = new[]
                 {
