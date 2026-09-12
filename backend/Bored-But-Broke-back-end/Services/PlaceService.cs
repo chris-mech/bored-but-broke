@@ -79,11 +79,11 @@ namespace Bored_But_Broke_back_end.Services
                     if (ActivitiesByCategory.TryGetValue(category, out var activities)) filteredActivities.UnionWith(activities);
                 }
 
-                if (filteredActivities.Count == 0) filteredActivities = AllActivities;
+                if (filteredActivities.Count == 0) filteredActivities = new HashSet<string>(AllActivities);
             }
             else
             {
-                filteredActivities = AllActivities;
+                filteredActivities = new HashSet<string>(AllActivities);
             }
 
             if (isIndoor) filteredActivities.IntersectWith(ActivitiesByWeather["indoor"]);
