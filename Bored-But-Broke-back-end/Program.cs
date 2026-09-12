@@ -10,9 +10,7 @@ using Bored_But_Broke_back_end.Services;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -119,14 +117,14 @@ namespace Bored_But_Broke_back_end
             builder.Services.AddOutputCache(options =>
             {
                 options.AddPolicy("PlacesPolicy", policy => policy
-                    .Expire(TimeSpan.FromMinutes(10))
+                    .Expire(TimeSpan.FromMinutes(60))
                     .SetVaryByQuery("location", "radius", "date", 
                     "startTime", "endTime", "categories", 
                     "ageRange", "budget", "limit")
                 );
                 options.SizeLimit = 100 * 1024 * 1024;
                 options.MaximumBodySize = 2 * 1024 * 1024;
-                options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(10)));
+                options.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(60)));
             });
 
             builder.Services.AddRateLimiter(options =>
