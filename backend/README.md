@@ -1,6 +1,6 @@
 # 🌍 Bored But Broke API
 
-A scalable ASP.NET Core Web API built to power **Bored But Broke**, an application designed to help users discover affordable activities based on their location, the weather, personal preferences, age, and how far they're willing to travel.
+An ASP.NET Core Web API built to power **Bored But Broke**, an application designed to help users discover affordable activities based on their location, the weather, personal preferences, age, and how far they're willing to travel.
 
 Developed as a team project, the API integrates multiple third-party services to deliver personalised recommendations while providing secure user authentication and data management. The project focuses on clean architecture, maintainable code, and real-world API integration.
 
@@ -13,7 +13,7 @@ Developed as a team project, the API integrates multiple third-party services to
 * Developed a favourites system for saving activities
 * Applied service-layer architecture and separation of concerns
 * Organised activity categories through configurable JSON data
-* Designed with scalability and maintainability in mind
+* Designed with maintainability in mind
 
 ## 🛠 Tech Stack
 
@@ -32,7 +32,7 @@ Developed as a team project, the API integrates multiple third-party services to
 
 ### Open-Meteo
 
-Used to retrieve weather data and help determine suitable activities based on current conditions.
+Used to retrieve the hourly forecast for the chosen date and time, and recommend indoor activities when rain, snow or storms are expected.
 
 ### Yelp Fusion API
 
@@ -40,7 +40,7 @@ Used to discover local businesses, attractions, and venues that match a user's p
 
 ### Geoapify
 
-Used for location-based services, geocoding, and distance calculations to provide relevant recommendations within a user's chosen travel range.
+Used to geocode the user's location into coordinates, so recommendations can be found within their chosen travel range.
 
 ## 🔐 Authentication & Security
 
@@ -60,7 +60,7 @@ The API uses cookie-based authentication to manage user sessions securely.
 
 * Register new accounts
 * Secure login and logout
-* Manage user preferences
+* Retrieve the signed-in user's details
 
 ### Activity Recommendations
 
@@ -74,7 +74,7 @@ The API uses cookie-based authentication to manage user sessions securely.
 
 * Save recommended activities
 * Retrieve saved favourites
-* Manage personalised activity lists
+* Remove activities from favourites
 
 ## 🗄 Database Integration
 
@@ -86,7 +86,7 @@ The application uses SQL Server and Entity Framework Core to manage user data an
 * Code-first migrations
 * Entity tracking
 * LINQ querying
-* CRUD operations
+* Create, read and delete operations
 * Dependency injection integration
 
 ## 🏗 Architecture
@@ -114,7 +114,7 @@ This project demonstrates the ability to:
 
 ✅ Store and protect user credentials securely
 
-✅ Develop personalised recommendation systems
+✅ Build personalised, filter-based activity recommendations
 
 ✅ Work with location and weather-based data
 
@@ -134,4 +134,4 @@ This project demonstrates the ability to:
 
 ---
 
-Bored But Broke was developed as a team project to explore real-world API integration, secure user authentication, and personalised recommendation systems while building a scalable backend using modern .NET development practices.
+Bored But Broke was developed as a team project to explore real-world API integration, secure user authentication, and personalised activity recommendations while building a backend using modern .NET development practices.

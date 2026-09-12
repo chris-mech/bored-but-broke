@@ -1,6 +1,6 @@
 🎯 Bored But Broke (Front End)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-A responsive front-end web application designed to help users quickly discover fun, affordable things to do based on their interests, budget, and situation.
+A Blazor front-end web application designed to help users quickly discover fun, affordable things to do based on their interests, budget, and situation.
 
 The idea behind this project came from a simple, relatable problem: sometimes you want to do something, but you don’t know what, and you don’t want to spend a long time searching or risk overspending. The goal was to reduce that friction and help users move from uncertainty to action as quickly as possible.
 
@@ -26,21 +26,21 @@ The aim was to create an interface that feels immediate, intuitive, and easy to 
 
 🛠️ Tech Stack
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-HTML – Structure and layout                                                                                                                                         
-CSS – Styling and responsive design                                                                                                                          
-JavaScript – Dynamic behaviour and API integration                                                                                                                    
-C# – Backend integration and data handling                                                                                                                            
+Blazor (.NET 8) – Interactive Server web app built from Razor components                                                                                                                                         
+C# – Component logic and API integration with HttpClient                                                                                                                          
+HTML & CSS – Structure, layout and styling                                                                                                                    
+JavaScript – Leaflet map and light/dark theme, called from C# via JS interop                                                                                                                            
 
 ✨ Key Features
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 🎯 Personalised activity recommendations based on user input                                                                                                           
-📍 Location-aware suggestions with distance context                                                                                                                  
+📍 Location-aware suggestions within a chosen travel distance                                                                                                                  
 💷 Budget-based filtering                                                                                                                                              
 🗂️ Sub-category filtering for more specific results                                                                                                                    
 🔄 Dynamic rendering of data from API responses                                                                                                                      
 🔐 User authentication with hashed passwords                                                                                                                         
-💾 Saved user preferences for a personalised experience                                                                                                                
-📱 Responsive design across mobile, tablet, and desktop                                                                                                              
+💾 Saved favourites and a remembered light/dark theme                                                                                                                
+📱 Responsive layout on the home and place details pages                                                                                                              
 🔗 API Integration                                                                                                                                                  
 
 The front end connects to a custom RESTful API built using C# and ASP.NET Core. Data is fetched dynamically and rendered based on user input, allowing the interface to adapt in real time to different user preferences and filters.
