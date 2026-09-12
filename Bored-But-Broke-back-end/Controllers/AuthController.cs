@@ -36,7 +36,7 @@ namespace Bored_But_Broke_back_end.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> LogoutUserAsync()
         {
-            await _authService.LogoutUserAsync();
+            await _authService.LogoutUserAsync(HttpContext);
 
             return Ok("Logout successful");
         }
