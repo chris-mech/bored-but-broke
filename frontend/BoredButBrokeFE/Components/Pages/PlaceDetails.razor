@@ -1,0 +1,265 @@
+﻿@page "/places/{PlaceId}"
+
+@using BoredButBrokeFE.Auth
+@using BoredButBrokeFE.Components.Models
+@using System.Text.Json
+@inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components.Authorization
+
+@if (error)
+{
+    <p>Could not load place. Please try again.</p>
+}
+else if (place is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="place-details-page">
+        <button class="back-button" @onclick="GoBack">
+            <span class="back-arrow">↩</span>
+            <span>Back</span>
+        </button>
+        <div class="place-img">
+            
+            <img src="@place.ImageUrl" alt="@place.PlaceName" />
+        </div>
+        <div class="place-content">
+            <div class="place-header">
+                <div class="place-title-section">
+                    <h1>@place.PlaceName</h1>
+
+                    <p class="place-location">
+                        📍@string.Join(", ", place.Location.DisplayAddress)
+                    </p>
+                </div>
+                
+                <div class="place-header-right">
+                    <div class="place-meta">
+                        <div class="meta-pill">⭐ @place.Rating</div>
+                        <div class="meta-pill">@GetPriceDisplay()</div>      
+                        <button class="favourite-btn @(isFavourited ? "favourited" : "")"
+                                @onclick="HandleFavouriteClick"
+                                title="@(isFavourited ? "Remove from favourites" : "Save to favourites")">
+                            @if (isFavourited)
+                            {
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                                         2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09
+                                         C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5
+                                         c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                            }
+                            else
+                            {
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06
+                                         a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78
+                                         1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                </svg>
+                            }
+                            <span class="favourite-label">@(isFavourited ? "Saved" : "Save")</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="places-category-and-opening-hours">
+                <div class="left-column">
+                    <div class="place-section">
+                        <h2>Categories</h2>
+
+                        <div class="category-list">
+                            @foreach (var category in place.Categories)
+                            {
+                                <div class="category-tag">@category.Title</div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (place.Coordinates.Latitude != 0 && place.Coordinates.Longitude != 0)
+                    {
+                        <div class="place-section map-section">
+                            <h2>Location</h2>
+
+                            <MovableMap ElementId="placeMap"
+                                        InitialLatitude="@place.Coordinates.Latitude"
+                                        InitialLongitude="@place.Coordinates.Longitude" 
+                                        LocationName="@place.PlaceName"/>
+                        </div>                        
+                    }
+                </div>
+                <div class="right-column">
+                    <div class="place-section">
+                        <h2>Opening Hours</h2>
+
+                        <div class="hours-list">
+                            @foreach (var openingHours in place.OpeningHours)
+                            {
+                                @foreach (var hour in openingHours.Hours)
+                                {
+                                    <div class="hour-row">
+                                        <span>@GetDayName(hour.Day)</span>
+                                        <span>@FormatTime(hour.Start) - @FormatTime(hour.End)</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            <a class="place-link" href="@place.PlaceUrl" target="_blank">
+                Visit Website
+            </a>
+
+        </div>
+    </div>
+
+    @if (showSignInPrompt)
+    {
+        <div class="modal-backdrop" @onclick="CloseModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:9999;">
+            <div @onclick:stopPropagation="true" style="background:white;border-radius:16px;padding:2rem;max-width:360px;width:90%;text-align:center;position:relative;z-index:10000;">
+                <button @onclick="CloseModal" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1rem;cursor:pointer;color:#888;">✕</button>
+                <div style="display:flex;justify-content:center;margin-bottom:1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="1.5" style="width:48px;height:48px;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </div>
+                <h2 style="margin:0 0 0.5rem;font-size:1.2rem;color:#111827;">Sign in to save favourites</h2>
+                <p style="color:#555;font-size:0.9rem;margin-bottom:1.5rem;">Keep track of places you love by creating a free account.</p>
+                <div style="display:flex;gap:0.75rem;justify-content:center;">
+                    <a href="/signin" style="background:#e53e3e;color:white;padding:0.6rem 1.4rem;border-radius:8px;text-decoration:none;font-weight:600;">Sign in / Register</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public string PlaceId { get; set; } = string.Empty;
+    private Place? place;
+
+    [Inject] 
+    private CookieAuthStateProvider authStateProvider { get; set; }
+
+    private bool error = false;
+    private bool isFavourited = false;
+    private bool showSignInPrompt = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        try
+        {
+            place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
+
+            var authState = await authStateProvider.GetAuthenticationStateAsync();
+            var isLoggedIn = authState.User.Identity?.IsAuthenticated ?? false;
+
+            if (isLoggedIn)
+            {
+                var response = await Http.GetAsync($"api/favourites/status?placeIds={PlaceId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    var status = JsonSerializer.Deserialize<List<bool>>(responseBody);
+                    isFavourited = status?[0] ?? false;
+                }
+            }
+        }
+        catch
+        {
+            error = true;
+        }
+    }
+
+    private async Task HandleFavouriteClick()
+    {
+        var authState = await authStateProvider.GetAuthenticationStateAsync();
+        var isLoggedIn = authState.User.Identity?.IsAuthenticated ?? false;
+
+        if (!isLoggedIn)
+        {
+            showSignInPrompt = true;
+            return;
+        }
+
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+
+        if (isFavourited)
+        {
+            try
+            {
+                var response = await Http.DeleteAsync($"api/favourites/{PlaceId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    isFavourited = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Remove favourite failed: {ex.Message}");
+            }
+            return;
+        }
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/favourites", place);
+            if (response.IsSuccessStatusCode)
+            {
+                isFavourited = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Favourite failed: {ex.Message}");
+        }
+    }
+
+    private void CloseModal() => showSignInPrompt = false;
+    
+    private string GetPriceDisplay()
+    {
+        return place?.Price switch
+        {
+            Price.Cheap => "£",
+            Price.Moderate => "££",
+            Price.Expensive => "£££",
+            Price.VeryExpensive => "££££",
+            _ => ""
+        };
+    }
+
+    private string GetDayName(int day)
+    {
+        return day switch
+        {
+            0 => "Monday",
+            1 => "Tuesday",
+            2 => "Wednesday",
+            3 => "Thursday",
+            4 => "Friday",
+            5 => "Saturday",
+            6 => "Sunday",
+            _ => ""
+        };
+    }
+
+    private string FormatTime(string time)
+    {
+        if (string.IsNullOrWhiteSpace(time) || time.Length != 4)
+        {
+            return time;
+        }
+        return $"{time[0..2]}:{time[2..4]}";
+    }
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
+    }
+}

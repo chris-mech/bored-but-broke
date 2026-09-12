@@ -1,0 +1,109 @@
+@using BoredButBrokeFE.Services
+@inject ThemeService ThemeService
+
+<div class="theme-toggle-wrapper">
+    <label class="toggle-switch" title="Toggle dark mode">
+        <input type="checkbox" class="toggle-checkbox" @onchange="HandleToggle" checked="@(CurrentTheme == "dark")" />
+        <span class="toggle-slider"></span>
+        <span class="toggle-label light-label">☀️</span>
+        <span class="toggle-label dark-label">🌙</span>
+    </label>
+</div>
+
+<style>
+    .theme-toggle-wrapper {
+        margin-left: 1rem;
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        width: 60px;
+        height: 32px;
+        background-color: #ccc;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        padding: 2px;
+    }
+
+    .toggle-switch:has(.toggle-checkbox:checked) {
+        background-color: #60A5FA;
+    }
+
+    .toggle-checkbox {
+        display: none;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        background-color: white;
+        border-radius: 50%;
+        left: 2px;
+        transition: left 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-switch:has(.toggle-checkbox:checked) .toggle-slider {
+        left: 30px;
+    }
+
+    .toggle-label {
+        position: absolute;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 26px;
+        transition: opacity 0.3s ease;
+    }
+
+    .light-label {
+        left: 4px;
+        opacity: 1;
+    }
+
+    .dark-label {
+        right: 4px;
+        opacity: 0.3;
+    }
+
+    .toggle-switch:has(.toggle-checkbox:checked) .light-label {
+        opacity: 0.3;
+    }
+
+    .toggle-switch:has(.toggle-checkbox:checked) .dark-label {
+        opacity: 1;
+    }
+
+    .toggle-switch:hover {
+        box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+    }
+</style>
+
+@code {
+    private string CurrentTheme = "light";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ThemeService.InitializeThemeAsync();
+        CurrentTheme = ThemeService.GetCurrentTheme();
+        ThemeService.OnThemeChanged += OnThemeChanged;
+    }
+
+    private async Task HandleToggle(ChangeEventArgs e)
+    {
+        await ThemeService.ToggleThemeAsync();
+        CurrentTheme = ThemeService.GetCurrentTheme();
+    }
+
+    private void OnThemeChanged()
+    {
+        CurrentTheme = ThemeService.GetCurrentTheme();
+        StateHasChanged();
+    }
+}

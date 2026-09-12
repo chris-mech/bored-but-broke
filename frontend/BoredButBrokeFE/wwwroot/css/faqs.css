@@ -1,0 +1,32 @@
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 800px;
+    margin-top: 1.5rem;
+}
+
+.faq-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.faq-item summary {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1E293B;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item p {
+    margin: 0.5rem 0 0.75rem;
+    color: #444;
+    line-height: 1.6;
+}

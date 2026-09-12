@@ -1,0 +1,46 @@
+﻿@using BoredButBrokeFE.Components.Models
+
+@if (Place is null) return;
+
+<div class="place-card" @onclick="GoToPlaceDetails">
+    <div class="place-info">
+        <img src="@Place.ImageUrl" alt="@Place.PlaceName"/>
+        <div class="place-meta">
+            <div class="meta-pill">⭐ @Place.Rating</div>
+            <div class="meta-pill">@GetPriceDisplay()</div>
+        </div>
+        <h3>@Place.PlaceName</h3>
+        <p>@string.Join(", ", Place.Location.DisplayAddress)</p>
+        <div class="category-list">
+            @foreach (var category in Place.Categories)
+            {
+                <div class="category-tag">@category.Title</div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Place Place { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    private void GoToPlaceDetails()
+    {
+        navigationManager.NavigateTo($"/places/{Place.PlaceId}");
+    }
+
+    private string GetPriceDisplay()
+    {
+        return Place?.Price switch
+        {
+            Price.Cheap => "£",
+            Price.Moderate => "££",
+            Price.Expensive => "£££",
+            Price.VeryExpensive => "££££",
+            _ => ""
+        };
+    }
+}

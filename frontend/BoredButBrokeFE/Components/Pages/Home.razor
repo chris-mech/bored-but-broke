@@ -1,0 +1,354 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@using BoredButBrokeFE.Components.Models
+
+<PageTitle>Bored But Broke</PageTitle>
+<HeadContent>
+    <link rel="stylesheet" href="css/home.css" />
+</HeadContent>
+
+<div class="hero-layout">
+    <div class="hero-left">
+        <div class="hero-heading">
+            It's okay to be broke.<br />
+            <span class="hero-heading-highlight">But it's not okay to be bored.</span>
+        </div>
+        <p class="hero-description">
+            Tell us where you are, how long you have, and what you're comfortable with spending. We'll take care of the rest and build you a full day plan around the weather.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-number stat-pink">100K+</span>
+                <span class="stat-label">Places to Explore</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-blue">16-Day</span>
+                <span class="stat-label">Weather Forecast</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-gold">100% FREE</span>
+                <span class="stat-label">No signup. No subscription.</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-turquoise">10K+</span>
+                <span class="stat-label">Free Activities</span>
+            </div>
+        </div>
+        <div class="download-section">
+            <div class="app-stores-container">
+                <img src="Download_app.png" alt="Download App" class="download-badge" />
+            </div>
+            <div class="qr-code-container">
+                <img src="Rickrolling_QR_code.png" alt="QR Code" class="qr-code" />
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="plan-form">
+            <div class="form-header">
+                <h1>Are you bored but broke?</h1>
+                <p class="tagline">Tell us a bit about yourself and we will do the rest. <span class="required-note">(Fields marked with * are required)</span></p>
+            </div><div class="form-question-row">
+                <div class="form-question">
+                    <label for="location">Enter your location*</label>
+                    <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+                </div>
+                <div class="form-question">
+                    <label for="radius">Distance</label>
+                    <select id="radius" class="form-input" @bind="Radius">
+                        <option value="1609">1 mile</option>
+                        <option value="4828">3 miles</option>
+                        <option value="8047">5 miles</option>
+                        <option value="16093">10 miles</option>
+                        <option value="24140">15 miles</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-question-row">
+                <div class="form-question date-field">
+                    <label for="date">Date*</label>
+                    <input type="date" id="date" class="form-input"
+                        min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                        max="@DateTime.Today.AddDays(16).ToString("yyyy-MM-dd")"
+                        @bind="SelectedDate" />
+                </div>
+                <div class="form-question">
+                    <label for="start-time">From</label>
+                    <select id="start-time" class="form-input" @bind="StartTime">
+                        @for (int h = 0; h < 24; h++)
+                        {
+                            <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-question">
+                    <label for="end-time">Until</label>
+                    <select id="end-time" class="form-input" @bind="EndTime">
+                        @for (int h = 0; h < 24; h++)
+                        {
+                            <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-question">
+                <label>Categories</label>
+                <div class="category-chips">
+                    @foreach (var cat in TopLevelCategories)
+                    {
+                        <button type="button"
+                                class="chip @(SelectedCategories.Contains(cat.Alias) ? "chip-selected" : "")"
+                                @onclick="() => ToggleCategory(cat)">
+                            @cat.Title
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="form-question-row">
+                <div class="form-question">
+                    <label for="age-range">Select an age range*</label>
+                    <select id="age-range" class="form-input" @bind="AgeRangeValue" required>
+                        <option value="" disabled selected>Choose an option</option>
+                        <option value="0">Under 18</option>
+                        <option value="1">18+</option>
+                        <option value="2">Family with children</option>
+                    </select>
+                </div>
+                <div class="form-question">
+                    <label for="budget">Select your budget*</label>
+                    <select id="budget" class="form-input" @bind="Budget" required>
+                        <option value="" disabled selected>Choose a budget</option>
+                        <option value="1">Cheap (£)</option>
+                        <option value="2">Moderate (££)</option>
+                        <option value="3">Expensive (£££)</option>
+                        <option value="4">Very Expensive (££££)</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (validationErrors.Any())
+            {
+                <ul class="validation-errors">
+                    @foreach (var error in validationErrors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            }
+            <button class="btn-submit" @onclick="HandleSearch">Search</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="mosaic-title">Most popular places</h2>
+
+<div class="mosaic-grid">
+    <div class="mosaic-item mi-1 border-blue">
+        <a href="/places/PnAodBud4i364JTr_X1mcg" class="mosaic-link">
+            <img src="Home Images/pexels-steak.jpg" alt="Hawksmoor" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Hawksmoor</span>
+                <span class="mosaic-rating">★★★★☆ 4.4</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-2 border-turquoise">
+        <a href="/places/jydWo0edI98Y-Swr5bmbBQ" class="mosaic-link">
+            <img src="Home Images/pexels-trafford-centre.jpg" alt="Trafford Centre" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Intu Trafford Centre</span>
+                <span class="mosaic-rating">★★★★☆ 3.9</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-3 border-blue">
+        <a href="/places/SauGGzZDWw7Gr1Ohqm4omQ" class="mosaic-link">
+            <img src="Home Images/pexels-aquarium.jpg" alt="Sea Life" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Sea Life</span>
+                <span class="mosaic-rating">★★★☆☆ 3.2</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-4 border-pink">
+        <a href="/places/ElxBJGffVB-jV1kMCG9PbQ" class="mosaic-link">
+            <img src="Home Images/pexels-national-gallery.jpg" alt="The National Gallery" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">The National Gallery</span>
+                <span class="mosaic-rating">★★★★★ 4.7</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-5 border-gold">
+        <a href="/places/h65i1MG-qok2e2eFU_1h1w" class="mosaic-link">
+            <img src="Home Images/pexels-sky-garden.jpg" alt="Sky Garden" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Sky Garden</span>
+                <span class="mosaic-rating">★★★★☆ 4.3</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-6 border-turquoise">
+        <a href="/places/IYSKMlGpn--rfzyg9MpEyQ" class="mosaic-link">
+            <img src="Home Images/pexels-camden-market.jpg" alt="Camden Market" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Camden Market</span>
+                <span class="mosaic-rating">★★★★☆ 4.2</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-7 border-blue">
+        <a href="/places/5BllGSfnsW45ywbXJSNEXg" class="mosaic-link">
+            <img src="Home Images/pexels-go-karting.jpg" alt="Lakeside Go Karting" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Buckmore Go Karting</span>
+                <span class="mosaic-rating">★★★★★ 5.0</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-8 border-gold">
+        <a href="/places/tWkX5zOrWBe14aoJXsp19Q" class="mosaic-link">
+            <img src="Home Images/pexels-mini-golf.jpg" alt="Mini Golf" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Ghetto Golf</span>
+                <span class="mosaic-rating">★★★★☆ 3.8</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-9 border-deep">
+        <a href="/places/vIYzfuZX1NpcvU94ZnUr4A" class="mosaic-link">
+            <img src="Home Images/pexels-drink.jpg" alt="All Bar One" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">All Bar One</span>
+                <span class="mosaic-rating">★★★★☆ 3.6</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-10 border-turquoise">
+        <a href="/places/QVzZF7_nDvzZnwinPOgfPg" class="mosaic-link">
+            <img src="Home Images/pexels-swan.jpg" alt="Fairlop Waters" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Fairlop Waters</span>
+                <span class="mosaic-rating">★★★☆☆ 3.1</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+    <div class="mosaic-item mi-11 border-blue">
+        <a href="/places/IEQLHQHgUiOU2j28gj8FVw" class="mosaic-link">
+            <img src="Home Images/pexels-zoo.jpg" alt="Chessington Zoo" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Chessington World of Adventures</span>
+                <span class="mosaic-rating">★★★★☆ 3.7</span>
+            </div>
+            <span class="mosaic-view-more-label">View More →</span>
+        </a>
+    </div>
+</div>
+
+@code{
+    private string Location { get; set; } = string.Empty;
+    private int Radius { get; set; } = 8047;
+    private DateTime? SelectedDate { get; set; }
+    private string StartTime { get; set; } = "00:00";
+    private string EndTime { get; set; } = "23:00";
+    private int? AgeRangeValue { get; set; } = null;
+    private AgeRange? AgeRange => AgeRangeValue.HasValue ? (AgeRange)AgeRangeValue.Value : null;
+    private string Budget { get; set; } = string.Empty;
+
+    private static readonly HashSet<Category> TopLevelCategories = new HashSet<Category>
+    {
+        new Category { Alias = "outdoor_adventure", Title = "Outdoor Adventure"},
+        new Category { Alias = "water_activities", Title = "Water Activities"},
+        new Category { Alias = "fitness_wellness", Title = "Fitness & Wellness"},
+        new Category { Alias = "parks_recreation", Title = "Parks & Recreation"},
+        new Category { Alias = "arts_culture", Title = "Arts & Culture"},
+        new Category { Alias = "entertainment", Title = "Entertainment"},
+        new Category { Alias = "beauty_personal_care", Title = "Beauty & Personal Care"},
+        new Category { Alias = "food_drink", Title = "Food & Drink"},
+        new Category { Alias = "restaurants", Title = "Restaurants"},
+        new Category { Alias = "bars_nightlife", Title = "Bars & Nightlife"},
+        new Category { Alias = "travel_tours", Title = "Travel & Tours"},
+        new Category { Alias = "shopping", Title = "Shopping"},
+    };
+
+    private HashSet<string> SelectedCategories { get; set; } = new();
+
+    private void ToggleCategory(Category category)
+    {
+        if (!SelectedCategories.Add(category.Alias))
+            SelectedCategories.Remove(category.Alias);
+        StateHasChanged();
+    }
+
+    private string BuildCategoriesParam()
+    {
+        if (SelectedCategories.Count == 0)
+            return string.Empty;
+
+        return string.Join(",", SelectedCategories.Order());
+    }
+
+    private List<string> validationErrors { get; set; } = new();
+
+    private void HandleSearch()
+    {
+        validationErrors.Clear();
+
+        if (string.IsNullOrWhiteSpace(Location))
+        {
+            validationErrors.Add("Please enter a location.");
+        }
+
+        if (SelectedDate == null)
+        {
+            validationErrors.Add("Please select a date.");
+        }
+
+        if (AgeRange == null)
+        {
+            validationErrors.Add("Please select an age range.");
+        }
+
+        if (string.IsNullOrWhiteSpace(Budget))
+        {
+            validationErrors.Add("Please select a budget.");
+        }
+
+        if (TimeSpan.TryParse(EndTime, out var end) &&
+            TimeSpan.TryParse(StartTime, out var start) &&
+            end <= start)
+        {
+            validationErrors.Add("End time must be after start time.");
+        }
+
+        if (!SelectedCategories.Any())
+            validationErrors.Add("Please select at least one category.");
+
+        if (validationErrors.Any())
+            return;
+
+        string url = $"/places?location={Location}" +
+                  $"&radius={Radius}" +
+                  $"&categories={BuildCategoriesParam()}" + 
+                  $"&date={SelectedDate:yyyy-MM-dd}" +
+                  $"&startTime={StartTime}" +
+                  $"&endTime={EndTime}" +
+                  $"&ageRange={(int)AgeRange!}" +
+                  $"&budget={Budget}";
+        NavigationManager.NavigateTo(url);
+    }
+}

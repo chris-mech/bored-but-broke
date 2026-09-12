@@ -1,0 +1,264 @@
+@page "/signin"
+@using BoredButBrokeFE.Auth
+@using BoredButBrokeFE.Components.Models
+@using BoredButBrokeFE.Components.Models.Auth
+@using System.ComponentModel.DataAnnotations
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject CookieAuthStateProvider AuthStateProvider
+
+<PageTitle>Sign In | Bored But Broke</PageTitle>
+<HeadContent>
+    <link rel="stylesheet" href="css/signin.css" />
+</HeadContent>
+
+@if (SuccessMessage is not null)
+{
+    <p style="color:green">@SuccessMessage</p>
+}
+
+<div class="auth-layout">
+    <div class="auth-card">
+
+        <div class="auth-toggle">
+            <button class="@(IsSignIn ? "toggle-btn active" : "toggle-btn")" @onclick="() => IsSignIn = true">Sign In</button>
+            <button class="@(!IsSignIn ? "toggle-btn active" : "toggle-btn")" @onclick="() => IsSignIn = false">Register</button>
+        </div>
+
+        @if (IsSignIn)
+        {
+            <EditForm Model="@loginModel" OnValidSubmit="HandleSignIn" class="auth-form">
+                <DataAnnotationsValidator />
+                <h1 class="auth-heading">Welcome back.</h1>
+                <p class="auth-subheading">Sign in to your account to continue planning.</p>
+
+                <div class="form-question">
+                    <label for="signin-email">Email address</label>
+                    <InputText type="email" id="signin-email" class="form-input" placeholder="e.g. your@email.com" @bind-Value="loginModel.Email" />
+                    <ValidationMessage For="@(() => loginModel.Email)" class="text-danger" />
+                    @if (Errors.Any())
+                    {
+                        <span class="api-error">@Errors.First()</span>
+                    }
+                </div>
+                <div class="form-question">
+                    <label for="signin-password">Password</label>
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowSignInPassword ? "text" : "password")" id="signin-password" class="form-input" placeholder="Enter your password" @bind-Value="loginModel.Password" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowSignInPassword = !ShowSignInPassword">
+                            @if (ShowSignInPassword) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
+                    <ValidationMessage For="@(() => loginModel.Password)" class="text-danger" />
+                </div>
+
+                <button type="submit" class="btn-submit" disabled="@(IsLoading)">
+                    @(IsLoading ? "Processing..." : "Sign In")
+                </button>
+            </EditForm>
+        }
+        else
+        {
+            <EditForm Model="@regModel" OnValidSubmit="HandleRegister" class="auth-form">
+                <h1 class="auth-heading">Create an account.</h1>
+                <p class="auth-subheading">Join Bored But Broke and start planning your perfect day out.</p>
+                <DataAnnotationsValidator />
+
+                <div class="form-question">
+                    <label for="reg-name">Full name</label>
+                    <InputText type="text" id="reg-name" class="form-input" placeholder="e.g. David Rose" @bind-Value="regModel.Name" />
+                    <ValidationMessage For="@(() => regModel.Name)" class="text-danger" />
+                </div>
+                <div class="form-question">
+                    <label for="reg-email">Email address</label>
+                    <InputText type="email" id="reg-email" class="form-input" placeholder="e.g. your@email.com" @bind-Value="regModel.Email" />
+                    <ValidationMessage For="@(() => regModel.Email)" class="text-danger" />
+                </div>
+                <div class="form-question">
+                    <label for="reg-password">Password</label>
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowRegPassword ? "text" : "password")" id="reg-password" class="form-input" placeholder="Choose a password" @bind-Value="regModel.Password" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowRegPassword = !ShowRegPassword">
+                            @if (ShowRegPassword) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
+                    <ValidationMessage For="@(() => regModel.Password)" class="text-danger" />
+                </div>
+                <div class="form-question">
+                    <label for="reg-confirm">Confirm password</label>
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowRegConfirm ? "text" : "password")" id="reg-confirm" class="form-input" placeholder="Repeat your password" @bind-Value="regModel.Confirm" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowRegConfirm = !ShowRegConfirm">
+                            @if (ShowRegConfirm) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
+                    <ValidationMessage For="@(() => regModel.Confirm)" class="text-danger" />
+                </div>
+
+                <button type="submit" class="btn-submit" disabled="@(IsLoading)">
+                    @(IsLoading ? "Processing..." : "Create Account")
+                </button>
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private bool IsSignIn { get; set; } = true;
+    private bool IsLoading { get; set; } = false;
+
+    private string SignInEmail { get; set; } = string.Empty;
+    private string SignInPassword { get; set; } = string.Empty;
+
+    private RegModel regModel = new();
+    private LoginModel loginModel = new();
+    private List<string> Errors = new();
+    private string? SuccessMessage;
+
+    private bool ShowSignInPassword { get; set; } = false;
+    private bool ShowRegPassword { get; set; } = false;
+    private bool ShowRegConfirm { get; set; } = false;
+
+    private async Task HandleSignIn()
+    {
+        LoginUserRequest loginRequest;
+        Errors.Clear();
+        SuccessMessage = null;
+        IsLoading = true;
+
+        try
+        {
+            loginRequest = new LoginUserRequest
+            {
+                Email = loginModel.Email,
+                Password = loginModel.Password
+            };
+
+            var client = HttpClientFactory.CreateClient("BBBBackEnd");
+            var response = await client.PostAsJsonAsync("api/auth/login", loginRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                AuthStateProvider.NotifyUserLoggedIn();
+                SuccessMessage = "Login successful! Redirecting to the home page...";
+                await Task.Delay(500);
+                NavigationManager.NavigateTo("/");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Errors.Add("Account locked. Try again later.");
+            }
+            else
+            {
+                Errors.Add("Invalid email or password.");
+            }
+        }
+        catch (Exception)
+        {
+            Errors.Add("Could not reach the server. Please try again.");
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleRegister()
+    {
+        RegisterUserRequest regRequest;
+        Errors.Clear();
+        SuccessMessage = null;
+        IsLoading = true;
+
+        try
+        {
+            regRequest = new RegisterUserRequest
+            {
+                FullName = regModel.Name,
+                Email = regModel.Email,
+                Password = regModel.Password
+            };
+
+            var client = HttpClientFactory.CreateClient("BBBBackEnd");
+            var response = await client.PostAsJsonAsync("api/auth/register", regRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuccessMessage = "Account created! Redirecting to login...";
+                await Task.Delay(1500);
+                NavigationManager.NavigateTo("/signin", forceLoad: true);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                Errors.Add("That email is already registered.");
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+
+                if (result?.Detail is not null)
+                {
+                    Errors.AddRange(result.Detail.Split(" | "));
+                }
+                else
+                {
+                    Errors.Add("Registration failed. Please try again.");
+                }
+            }
+        }
+        catch (Exception)
+        {
+            Errors.Add("Could not reach the server. Please try again.");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private class RegModel
+    {
+        [Required(ErrorMessage = "Full name is required.")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required.")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).+$",
+        ErrorMessage = "Password must contain at least 1 capital letter and 1 digit.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Please confirm your password.")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "The passwords do not match.")]
+        public string Confirm { get; set; } = string.Empty;
+    }
+
+    private class LoginModel
+    {
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
+    }
+}

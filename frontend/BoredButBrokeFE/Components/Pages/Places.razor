@@ -1,0 +1,261 @@
+﻿@page "/places"
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager Navigation
+@using BoredButBrokeFE.Components.Models
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+<PageTitle>Places</PageTitle>
+
+@if (isError)
+{
+    <div class="places-error-page">
+        <div class="places-error-wrapper">
+
+            <div class="places-error-illustration">
+                <div class="places-error-bubble"></div>
+
+                <div class="places-error-browser">
+                    <div class="places-error-browser-bar">
+                        <span class="places-error-browser-dot"></span>
+                        <span class="places-error-browser-dot"></span>
+                        <span class="places-error-browser-dot"></span>
+                    </div>
+
+                    <div class="places-error-browser-face">
+                        <div class="places-error-browser-eyes">
+                            <div class="places-error-browser-eye"></div>
+                            <div class="places-error-browser-eye"></div>
+                        </div>
+
+                        <div class="places-error-browser-mouth"></div>
+                    </div>
+                </div>
+
+                <div class="places-error-browser-shadow"></div>
+            </div>
+
+            <h1 class="places-error-title">
+                Oops!
+            </h1>
+
+            <p class="places-error-text">
+                @(string.IsNullOrWhiteSpace(error.Detail)
+                            ? "We couldn't load places right now."
+                            : error.Detail)
+        </p>
+
+            <button class="places-error-button" @onclick="GoHome">
+                Go Back Home
+            </button>
+
+        </div>
+    </div>
+}
+else if (isLoading)
+{
+    <p>Finding places for you...</p>
+}
+else
+{
+    <div class="places-results-page">
+        <div class="filter-column">
+            <h3 class="filter-title">Filters</h3>
+
+            <div class="filter-section">
+                <h4>Categories</h4>
+                @foreach (var category in visibleCategories)
+                {
+                    <label class="filter-option">
+                        <input type="checkbox"
+                                checked="@selectedCategories.Contains(category)"
+                                @onchange="() => ToggleCategory(category)" />
+                        <span>@category</span>
+                    </label>
+                }
+                @if (availableCategories.Count > categoryPreviewCount)
+                {
+                    <button type="button" class="view-more-btn" @onclick="ToggleShowAllCategories">
+                        @(showAllCategories ? "View less" : $"View {availableCategories.Count - categoryPreviewCount} more...")
+                    </button>
+                }
+            </div>
+
+            <div class="filter-section">
+                <h4>Price</h4>
+
+                @foreach (var price in availablePrices)
+                {
+                    <label class="filter-option">
+                        <input type="checkbox" checked="@selectedPrices.Contains(price)" @onchange="() => TogglePrice(price)" />
+                        <span>@PriceLabel(price)</span>
+                    </label>
+                }
+            </div>
+        </div>
+
+        <div class="places-results">
+            <h1>Found Results</h1>
+            @if (isIndoor != null)
+            {
+                <p>The weather for @SelectedDate, from @StartTime to @EndTime is suitable for @(isIndoor.Value ? "indoor activities only." : "both indoor and outdoor activities.")</p>
+            }
+            <PlaceSummaryList Places="filteredPlaces"/>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    public string Location { get; set; }
+
+    [SupplyParameterFromQuery(Name = "date")]
+    public string SelectedDate { get; set; }
+
+    [SupplyParameterFromQuery] 
+    public string StartTime { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string EndTime { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string AgeRange { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string Budget { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string Categories { get; set; } 
+
+    [SupplyParameterFromQuery]
+    public int Radius { get; set; } = 8047;
+
+    private List<Place> allPlaces { get; set; } = new();
+    private List<Place> filteredPlaces { get; set; } = new();
+    private bool? isIndoor { get; set; }
+    private bool isLoading { get; set; } = true;
+    private bool isError { get; set; } = false;
+    private ErrorResponse error { get; set; } = new();
+
+    private HashSet<Price> selectedPrices { get; set; } = new();
+
+    private List<Price> availablePrices => allPlaces
+        .Select(p => p.Price)
+        .Distinct()
+        .OrderBy(p => p)
+        .ToList();
+
+    private void TogglePrice(Price price)
+    {
+        if (selectedPrices.Contains(price))
+            selectedPrices.Remove(price);
+        else
+            selectedPrices.Add(price);
+
+        ApplyFilters();
+    }
+
+    private static string PriceLabel(Price price) => price switch
+    {
+        Price.Cheap => "Cheap (£)",
+        Price.Moderate => "Moderate (££)",
+        Price.Expensive => "Expensive (£££)",
+        Price.VeryExpensive => "Very Expensive (££££)",
+        _ => price.ToString()
+    };
+
+    private List<string> availableCategories =>
+        allPlaces.SelectMany(p => p.Categories)
+                    .Select(c => c.Title)
+                    .Distinct()
+                    .ToList();
+
+    private HashSet<string> selectedCategories { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var queryParams = new Dictionary<string, string>();
+
+        if (!string.IsNullOrWhiteSpace(Location))
+            queryParams["location"] = Location;
+        if (Radius > 0)
+            queryParams["radius"] = Radius.ToString();
+        if (!string.IsNullOrWhiteSpace(Categories))
+            queryParams["categories"] = Categories;
+        if (!string.IsNullOrWhiteSpace(SelectedDate))
+            queryParams["date"] = SelectedDate;
+        if (!string.IsNullOrWhiteSpace(StartTime))
+            queryParams["startTime"] = StartTime;
+        if (!string.IsNullOrWhiteSpace(EndTime))
+            queryParams["endTime"] = EndTime;
+        if (!string.IsNullOrWhiteSpace(AgeRange))
+            queryParams["ageRange"] = AgeRange;
+        if (!string.IsNullOrWhiteSpace(Budget))
+            queryParams["budget"] = Budget;
+
+        var queryString = string.Join("&", queryParams.Select(kv =>
+            $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
+
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        var response = await Http.GetAsync($"api/places?{queryString}");
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            var placesResponse = JsonSerializer.Deserialize<PlacesResponse>(responseBody);
+            allPlaces = placesResponse?.Places ?? new List<Place>();
+            isIndoor = placesResponse?.IsIndoor;
+        }
+        else
+        {
+            error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
+            isError = true;
+        }
+
+        ApplyFilters();
+        isLoading = false;
+    }
+
+    private const int categoryPreviewCount = 5;
+    private bool showAllCategories { get; set; } = false;
+
+    private List<string> visibleCategories =>
+        showAllCategories
+            ? availableCategories
+            : availableCategories.Take(categoryPreviewCount).ToList();
+
+    private void ToggleCategory(string category)
+    {
+        if (selectedCategories.Contains(category))
+            selectedCategories.Remove(category);
+        else
+            selectedCategories.Add(category);
+
+        ApplyFilters();
+    }
+    private void ToggleShowAllCategories()
+    {
+        showAllCategories = !showAllCategories;
+    }
+
+    private void ApplyFilters()
+    {
+
+        filteredPlaces = allPlaces
+            .Where(p => (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
+                (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
+            .ToList();
+    }
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private record PlacesResponse
+    {
+        [JsonPropertyName("places")]
+        public List<Place> Places { get; set; } = [];
+        [JsonPropertyName("isIndoor")]
+        public bool IsIndoor { get; set; }
+    }
+}

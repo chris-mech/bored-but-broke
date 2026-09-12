@@ -1,0 +1,18 @@
+﻿<div class="card @(Status == "Healthy" ? "healthy" : "unhealthy")">
+    <span class="name">@Name</span>
+
+    <span class="status">
+        @if (Status == "Healthy")
+        {
+            <span>✅ Healthy</span>
+        }
+        else
+        {
+            <span>❌ @Status</span>
+        }
+    </span>
+</div>
+@code {
+    [Parameter] public string Name { get; set; } = "";
+    [Parameter] public string Status { get; set; } = "";
+}

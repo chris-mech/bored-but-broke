@@ -1,0 +1,45 @@
+.facts-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 3rem 0;
+    margin: 2rem 0 4rem 0;
+    text-align: center;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.facts-text {
+    flex: 0 1 420px;
+    max-width: 420px;
+    height: 8rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.facts-text p {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #0F172A;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+.facts-arrow {
+    background: none;
+    border: none;
+    font-size: 3.5rem;
+    color: #60A5FA;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.facts-arrow:hover {
+    color: #FB7185;
+}

@@ -1,0 +1,147 @@
+.auth-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    padding: 3rem 1.5rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+.auth-toggle {
+    display: flex;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    background-color: transparent;
+    color: #1E293B;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.toggle-btn.active {
+    background-color: #60A5FA;
+    color: #fff;
+}
+
+.toggle-btn:not(.active):hover {
+    background-color: #f1f5f9;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-heading {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 0.25rem 0;
+}
+
+.auth-subheading {
+    font-size: 0.95rem;
+    color: #1E293B;
+    margin: 0 0 0.75rem 0;
+}
+
+.form-question {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-question label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #0F172A;
+}
+
+.form-input {
+    padding: 0.65rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    height: 2.8rem;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #60A5FA;
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+}
+
+.btn-submit {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #60A5FA;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: #4a94e8;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-input {
+    padding-right: 2.8rem;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.text-danger,
+.validation-message {
+    font-size: 0.78rem;
+    color: #e11d48;
+    margin: 0;
+}
+
+.api-error {
+    font-size: 0.78rem;
+    color: #e11d48;
+    margin: 0;
+}

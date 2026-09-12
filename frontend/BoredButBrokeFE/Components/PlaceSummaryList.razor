@@ -1,0 +1,295 @@
+﻿@using BoredButBrokeFE.Components.Models
+
+<div class="places-grid">
+    @foreach (var place in Places)
+    {   
+        <PlaceSummary Place="place"/>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Place> Places { get; set; } = new List<Place>
+    {
+        new Place
+        {
+            PlaceId = "1",
+            PlaceName = "Tate Modern",
+            Location = new Location
+            {
+                Address1 = "Bankside",
+                City = "London",
+                ZipCode = "SE1 9TG",
+                Country = "United Kingdom",
+                State = "England",
+                DisplayAddress = new List<string>
+                {
+                    "Bankside",
+                    "London SE1 9TG",
+                    "United Kingdom"
+                }
+            },
+            Categories = new List<Category>
+            {
+                new Category
+                {
+                    Alias = "art_gallery",
+                    Title = "Art Gallery"
+                },
+                new Category
+                {
+                    Alias = "museum",
+                    Title = "Museum"
+                }
+            },
+            Price = Price.Cheap,
+            Coordinates = new Coordinates
+            {
+                Latitude = 51.5076,
+                Longitude = -0.0994
+            },
+            OpeningHours = new List<OpeningHours>
+            {
+                new OpeningHours {
+                    Hours = new List<Hour>
+                    {
+                        new Hour
+                        {
+                            Day = 0,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 1,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 2,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 3,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 4,
+                            Start = "0800",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 5,
+                            Start = "0900",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 6,
+                            Start = "0900",
+                            End = "2300"
+                        }
+                    },
+                    HoursType = "REGULAR",
+                    IsOpenNow = true
+                }
+            },
+            Rating = 4.8,
+            PlaceUrl = "https://www.tate.org.uk/visit/tate-modern",
+            ImageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
+        },
+        new Place
+        {
+            PlaceId = "2",
+            PlaceName = "Hyde Park",
+            Location = new Location
+            {
+                Address1 = "Hyde Park",
+                City = "London",
+                ZipCode = "W2 2UH",
+                Country = "United Kingdom",
+                State = "England",
+                DisplayAddress = new List<string>
+                {
+                    "Hyde Park",
+                    "London W2 2UH",
+                    "United Kingdom"
+                }
+            },
+            Categories = new List<Category>
+            {
+                new Category
+                {
+                    Alias = "park",
+                    Title = "Park"
+                },
+                new Category
+                {
+                    Alias = "outdoors",
+                    Title = "Outdoors"
+                }
+            },
+            Price = Price.Cheap,
+            Coordinates = new Coordinates
+            {
+                Latitude = 51.5073,
+                Longitude = -0.1657
+            },
+            OpeningHours = new List<OpeningHours>
+            {
+                new OpeningHours {
+                    Hours = new List<Hour>
+                    {
+                        new Hour
+                        {
+                            Day = 0,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 1,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 2,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 3,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 4,
+                            Start = "0800",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 5,
+                            Start = "0900",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 6,
+                            Start = "0900",
+                            End = "2300"
+                        }
+                    },
+                    HoursType = "REGULAR",
+                    IsOpenNow = true
+                }
+            },
+            Rating = 4.7,
+            PlaceUrl = "https://www.royalparks.org.uk/parks/hyde-park",
+            ImageUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+        },
+
+        new Place
+        {
+            PlaceId = "3",
+            PlaceName = "Electric Shuffle Canary Wharf",
+            Location = new Location
+            {
+                Address1 = "10 Cabot Square",
+                City = "London",
+                ZipCode = "E14 4EY",
+                Country = "United Kingdom",
+                State = "England",
+                DisplayAddress = new List<string>
+                {
+                    "10 Cabot Square",
+                    "London E14 4EY",
+                    "United Kingdom"
+                }
+            },
+            Categories = new List<Category>
+            {
+                new Category
+                {
+                    Alias = "games",
+                    Title = "Games"
+                },
+                new Category
+                {
+                    Alias = "nightlife",
+                    Title = "Nightlife"
+                }
+            },
+            Price = Price.Moderate,
+            Coordinates = new Coordinates
+            {
+                Latitude = 51.5049,
+                Longitude = -0.0195
+            },
+            OpeningHours = new List<OpeningHours>
+            {
+                new OpeningHours {
+                    Hours = new List<Hour>
+                    {
+                        new Hour
+                        {
+                            Day = 0,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 1,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 2,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 3,
+                            Start = "0800",
+                            End = "2300"
+                        },
+                        new Hour
+                        {
+                            Day = 4,
+                            Start = "0800",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 5,
+                            Start = "0900",
+                            End = "0000"
+                        },
+                        new Hour
+                        {
+                            Day = 6,
+                            Start = "0900",
+                            End = "2300"
+                        }
+                    },
+                    HoursType = "REGULAR",
+                    IsOpenNow = true
+                }
+            },
+            Rating = 4.5,
+            PlaceUrl = "https://electricshuffle.com",
+            ImageUrl = "https://images.unsplash.com/photo-1511512578047-dfb367046420"
+        }
+    };
+}

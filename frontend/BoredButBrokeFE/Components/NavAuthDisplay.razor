@@ -1,0 +1,33 @@
+﻿@using BoredButBrokeFE.Auth
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IHttpClientFactory HttpClientFactory
+@inject CookieAuthStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
+<AuthorizeView>
+    <Authorized>
+        <div class="nav-item">
+            <NavLink class="nav-link" href="favourites">Favourites</NavLink>
+        </div>
+        <div class="nav-auth-wrapper">
+            <span class="nav-greeting">Hello, @context.User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value!</span>
+            <button class="nav-logout-btn" @onclick="HandleLogout">Log out</button>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="nav-item nav-signin-wrapper">
+            <NavLink class="nav-link nav-signin" href="signin">Sign In</NavLink>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task HandleLogout()
+    {
+        var client = HttpClientFactory.CreateClient("BBBBackEnd");
+        await client.PostAsync("api/auth/logout", null);
+
+        AuthStateProvider.NotifyUserLoggedOut();
+        Nav.NavigateTo("/", forceLoad: true);
+    }
+}

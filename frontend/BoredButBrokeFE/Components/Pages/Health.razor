@@ -1,0 +1,53 @@
+﻿@page "/health"
+@inject IHttpClientFactory HttpClientFactory
+
+<div class="health-page">
+    <HealthSummary AllHealthy="true" />
+
+    <div class="health-grid">
+        <HealthCard Name="Yelp" Status="Healthy" />
+        <HealthCard Name="Geoapify" Status="Healthy" />
+        <HealthCard Name="OpenMeteo" Status="Healthy" />
+    </div>
+</div>
+
+@code {
+    private Dictionary<string, string> statusData = new();
+    private bool allHealthy;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+        var response = await Http.GetFromJsonAsync<HealthResponse>("/health");
+
+        if (response?.Checks?.Count > 0)
+        {
+            statusData = response.Checks[0].Data;
+        }
+        else
+        {
+            statusData = new Dictionary<string, string>();
+        }
+
+        allHealthy = statusData.Values.All(v => v == "Healthy");
+
+        Console.WriteLine($"Response null: {response is null}");
+
+        if (response != null)
+        {
+            Console.WriteLine($"Checks count: {response.Checks?.Count}");
+        }
+    }
+        public class HealthResponse
+            {
+                public string Status { get; set; } = "";
+                public List<HealthCheck> Checks { get; set; } = new();
+            }
+
+        public class HealthCheck
+            {
+                public string Name { get; set; } = "";
+                public Dictionary<string, string> Data { get; set; } = new();
+            }
+
+}

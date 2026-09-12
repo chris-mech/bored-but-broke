@@ -1,0 +1,15 @@
+﻿<div class="summary @(AllHealthy ? "ok" : "bad")">
+    @if (AllHealthy)
+    {
+        <h2>✅ All systems operational</h2>
+    }
+    else
+    {
+        <h2>❌ Some systems are experiencing issues</h2>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public bool AllHealthy { get; set; }
+}

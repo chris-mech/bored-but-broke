@@ -1,0 +1,13 @@
+﻿.health-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ok {
+    border-left: 4px solid var(--success);
+}
+
+.bad {
+    border-left: 4px solid var(--error);
+}

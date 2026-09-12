@@ -1,0 +1,263 @@
+﻿.place-details-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.place-img{
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    border-radius: 24px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+    .place-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+.place-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.place-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.place-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.favourite-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1.5px solid #60A5FA;
+    background: white;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #60A5FA;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+}
+
+    .favourite-btn:hover {
+        border-color: #e53e3e;
+        color: #e53e3e;
+        transform: scale(1.03);
+    }
+
+    .favourite-btn.favourited {
+        border-color: #e53e3e;
+        color: #e53e3e;
+        background: #fff5f5;
+    }
+
+    .favourite-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .favourite-btn.favourited svg {
+        fill: #e53e3e;
+        stroke: none;
+    }
+
+.favourite-label {
+    line-height: 1;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.place-title-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.place-location {
+    color: #6B7280;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.place-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid #fb7185;
+    color: #fb7185;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.places-category-and-opening-hours {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.place-section {
+    background: white;
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+}
+
+    .place-section h2 {
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        color: #111827;
+    }
+
+.place-section map-section {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    height: fit-content;
+}
+
+.category-list {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.category-tag {
+    background: #EEF2FF;
+    color: #4338CA;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hour-row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.place-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+    .place-link:hover {
+        background: #1F2937;
+    }
+
+.loading-text {
+    padding: 4rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #6B7280;
+}
+
+@media (max-width: 768px) {
+
+    .place-details-page {
+        padding: 1rem;
+    }
+
+    .place-hero {
+        height: 260px;
+        border-radius: 18px;
+    }
+
+    .place-title-section h1 {
+        font-size: 2rem;
+    }
+
+    .place-header {
+        flex-direction: column;
+    }
+
+    .place-meta {
+        width: 100%;
+    }
+}
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 999px;
+    background: white;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.back-arrow {
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.back-button:hover {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
+    transform: translateX(-2px);
+}
+
+/*.places-category-and-opening-hours {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: start;
+}*/

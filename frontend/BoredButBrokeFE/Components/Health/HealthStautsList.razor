@@ -1,0 +1,9 @@
+﻿@foreach (var item in StatusData)
+{
+    <HealthCard Name="@item.Key" Status="@item.Value" />
+}
+
+@code {
+    [Parameter]
+    public Dictionary<string, string> StatusData { get; set; } = new();
+}

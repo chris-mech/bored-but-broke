@@ -1,0 +1,545 @@
+:root {
+    --primary-bg: #ffffff;
+    --primary-text: #000000;
+    --secondary-text: #555555;
+    --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --input-border: #cccccc;
+    --form-shadow: rgba(0, 0, 0, 0.07);
+    --nav-bg: #ffffff;
+    --nav-text: #000000;
+    --button-hover-bg: #f1f5f9;
+    --overlay-bg: rgba(0, 0, 0, 0.75);
+}
+
+:root[data-theme="dark"] {
+    --primary-bg: #1a1a1a;
+    --primary-text: #e0e0e0;
+    --secondary-text: #b0b0b0;
+    --border-color: #333333;
+    --input-bg: #2a2a2a;
+    --input-border: #444444;
+    --form-shadow: rgba(0, 0, 0, 0.3);
+    --nav-bg: #1a1a1a;
+    --nav-text: #e0e0e0;
+    --button-hover-bg: #333333;
+    --overlay-bg: rgba(0, 0, 0, 0.85);
+}
+
+html {
+    background-color: var(--primary-bg);
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+.top-nav {
+    border-bottom: none;
+}
+
+
+.plan-form {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 24px var(--form-shadow);
+}
+
+.form-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--primary-text);
+}
+
+:root[data-theme="dark"] .form-input {
+    color: #000000;
+}
+
+.form-input:focus {
+    border-color: #60A5FA;
+}
+
+select.form-input {
+    color: #000000;
+}
+
+:root[data-theme="dark"] select.form-input {
+    color: #000000;
+}
+
+select.form-input option {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+:root[data-theme="dark"] select.form-input option {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.form-question label {
+    color: var(--primary-text);
+}
+
+.tagline {
+    color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .tagline {
+    color: #ffffff;
+}
+
+.required-note {
+    color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .required-note {
+    color: #ffffff;
+}
+
+.hero-heading {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .hero-heading {
+    color: #ffffff;
+}
+
+.hero-description {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .hero-description {
+    color: #ffffff;
+}
+
+.stat-label {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .stat-label {
+    color: #ffffff;
+}
+
+.page-content {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+}
+
+.page-content h1 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .page-content h1 {
+    color: #ffffff;
+}
+
+.page-content h2 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .page-content h2 {
+    color: #ffffff;
+}
+
+.page-content .lead {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content .lead {
+    color: #ffffff;
+}
+
+.page-content p {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content p {
+    color: #ffffff;
+}
+
+.page-content strong {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content strong {
+    color: #ffffff;
+}
+
+.faq-item summary {
+    color: var(--primary-text);
+    background-color: var(--input-bg);
+}
+
+:root[data-theme="dark"] .faq-item summary {
+    color: #ffffff;
+}
+
+.faq-item {
+    border-color: var(--border-color);
+}
+
+.faq-item p {
+    color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .faq-item p {
+    color: #ffffff;
+}
+
+.auth-card {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 24px var(--form-shadow);
+}
+
+.auth-heading {
+    color: var(--primary-text);
+}
+
+:root[data-theme="dark"] .auth-heading {
+    color: #ffffff;
+}
+
+.auth-subheading {
+    color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .auth-subheading {
+    color: #ffffff;
+}
+
+.toggle-btn {
+    color: var(--primary-text);
+    background-color: transparent;
+}
+
+.toggle-btn:not(.active):hover {
+    background-color: var(--button-hover-bg);
+}
+
+.toggle-btn.active {
+    background-color: #60A5FA;
+    color: #ffffff;
+}
+
+.about-mosaic {
+    background-color: var(--primary-bg);
+}
+
+:root[data-theme="dark"] .about-mosaic {
+    background-color: #000000;
+}
+
+.mosaic-hover-overlay {
+    background: linear-gradient(transparent, var(--overlay-bg));
+}
+
+.btn-submit {
+    background-color: #60A5FA;
+    color: #ffffff;
+}
+
+.btn-submit:hover {
+    background-color: #4a94e8;
+}
+
+.category-chips .chip {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--primary-text);
+}
+
+:root[data-theme="dark"] .category-chips .chip {
+    color: #ffffff;
+}
+
+.category-chips .chip:hover {
+    border-color: #60A5FA;
+}
+
+.category-chips .chip-selected {
+    background-color: #60A5FA;
+    color: #ffffff;
+    border-color: #60A5FA;
+}
+
+:root[data-theme="dark"] .category-chips .chip-selected {
+    background-color: #FB7185;
+    border-color: #FB7185;
+}
+
+.facts-text p {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .facts-text p {
+    color: #ffffff;
+}
+
+#fact-display {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] #fact-display {
+    color: #ffffff;
+}
+
+.plan-form h1 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .plan-form h1 {
+    color: #ffffff;
+}
+
+.mosaic-title {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .mosaic-title {
+    color: #ffffff;
+}
+
+.qr-code {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] .qr-code {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-wrapper {
+    background-color: transparent;
+}
+
+:root[data-theme="dark"] .main-footer {
+    background-color: #1a1a1a;
+    border-top-color: #333333;
+    color: #9ca3af;
+}
+
+.nav-greeting {
+    color: #000000;
+}
+
+:root[data-theme="dark"] .nav-greeting {
+    color: #000000;
+}
+
+/* Places page */
+:root[data-theme="dark"] .places-results-page {
+    background-color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .filter-column {
+    background-color: #2a2a2a;
+    border-right-color: #444444;
+}
+
+:root[data-theme="dark"] .filter-column h3,
+:root[data-theme="dark"] .filter-column h4 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .filter-option span {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .places-results h1,
+:root[data-theme="dark"] .places-results h2,
+:root[data-theme="dark"] .places-results h3 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .places-results p {
+    color: #60A5FA;
+}
+
+.places-results p {
+    color: #60A5FA;
+}
+
+:root[data-theme="dark"] .back-button {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .back-button:hover {
+    background-color: #333333;
+    border-color: #555555;
+}
+
+/* Favourites page */
+:root[data-theme="dark"] .places-results-page p {
+    color: #ffffff;
+}
+
+/* Place summary cards */
+:root[data-theme="dark"] .place-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+:root[data-theme="dark"] .place-card h3 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .place-card p {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .place-info {
+    background-color: #2a2a2a;
+}
+
+/* Place details page */
+:root[data-theme="dark"] .place-details-page {
+    background-color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .place-title-section h1 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .place-location {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .place-section {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+}
+
+:root[data-theme="dark"] .place-section h2 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .hour-row {
+    border-bottom-color: #444444;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .loading-text {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .category-tag {
+    background: #fb7185;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .favourite-btn {
+    background-color: #2a2a2a;
+}
+
+:root[data-theme="dark"] .place-link {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .place-link:hover {
+    background-color: #26b8a5;
+}
+
+/* Error page (404) styling */
+.notfound-page {
+    background-color: var(--primary-bg);
+}
+
+:root[data-theme="dark"] .notfound-page {
+    background-color: #1a1a1a;
+}
+
+.notfound-title {
+    color: #2DD4BF;
+}
+
+:root[data-theme="dark"] .notfound-title {
+    color: #2DD4BF;
+}
+
+.notfound-text {
+    color: #FB7185;
+}
+
+:root[data-theme="dark"] .notfound-text {
+    color: #FB7185;
+}
+
+.notfound-button {
+    color: #2DD4BF;
+    border-color: #2DD4BF;
+    background-color: transparent;
+}
+
+:root[data-theme="dark"] .notfound-button {
+    color: #2DD4BF;
+    border-color: #2DD4BF;
+    background-color: transparent;
+}
+
+.notfound-button:hover {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .notfound-button:hover {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+.notfound-footer {
+    color: #9ca3af;
+    border-top-color: #333333;
+}
+
+:root[data-theme="dark"] .notfound-footer {
+    color: #9ca3af;
+    border-top-color: #333333;
+    background-color: #0f0f0f;
+}
+
+.notfound-browser {
+    background-color: #1a1a1a;
+    border-color: #2DD4BF;
+}
+
+:root[data-theme="dark"] .notfound-browser {
+    background-color: #2a2a2a;
+    border-color: #2DD4BF;
+}
+
+.notfound-browser-shadow {
+    background-color: #444444;
+}
+
+:root[data-theme="dark"] .notfound-browser-shadow {
+    background-color: #555555;
+}
+
+/* Error page (/Error) styling */
+.text-danger {
+    color: #dc2626;
+}
+
+:root[data-theme="dark"] .text-danger {
+    color: #ef4444;
+}
+
+code {
+    background-color: var(--input-bg);
+    color: var(--primary-text);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+:root[data-theme="dark"] code {
+    background-color: #2a2a2a;
+    color: #2DD4BF;
+}

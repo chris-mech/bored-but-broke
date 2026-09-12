@@ -1,0 +1,130 @@
+﻿.places-error-page {
+    width: 100%;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.places-error-wrapper {
+    text-align: center;
+    max-width: 600px;
+}
+
+.places-error-title {
+    font-size: 4rem;
+    color: #2DD4BF;
+    letter-spacing: 8px;
+    margin-top: 40px;
+}
+
+.places-error-text {
+    color: #FB7185;
+    line-height: 2;
+    margin: 30px 0;
+}
+
+.places-error-button {
+    padding: 14px 40px;
+    border-radius: 999px;
+    border: 2px solid #2DD4BF;
+    background: transparent;
+    color: #2DD4BF;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+    .places-error-button:hover {
+        background: #38bdf8;
+        color: white;
+    }
+
+.places-results-page {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 1rem;
+}
+
+.places-results {
+    width: 100%;
+    min-width: 0;
+}
+
+.filter-column {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: #ffffff;
+    padding: 0.5rem;
+    border-right: 1px solid #000000;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.view-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fb7185;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: color 0.15s ease, gap 0.15s ease;
+}
+
+    .view-more-btn::after {
+        content: '›';
+        font-size: 1rem;
+        transition: transform 0.2s ease;
+    }
+
+    .view-more-btn:hover {
+        color: #4f46e5;
+        gap: 7px;
+    }
+
+    .view-more-btn.expanded::after {
+        transform: rotate(90deg);
+    }
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 999px;
+    background: white;
+    color: #FB7185;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+}
+
+.back-button:hover {
+    background: #FB7185;
+    color: white;
+    transform: translateX(-2px);
+}
+
+.view-more-btn:hover {
+    color: #2DD4BF;
+    gap: 7px;
+}
