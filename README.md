@@ -17,7 +17,11 @@ The team's original pull requests are still available in the repositories below.
 
 ## Demo
 
-[![Bored But Broke demo video](https://img.youtube.com/vi/HPBQWKxFyMs/maxresdefault.jpg)](https://youtu.be/HPBQWKxFyMs)
+A short video walkthrough of the app is on YouTube. Click the thumbnail or the link below to watch it.
+
+[![Watch the Bored But Broke demo video on YouTube](https://img.youtube.com/vi/HPBQWKxFyMs/maxresdefault.jpg)](https://youtu.be/HPBQWKxFyMs "Watch on YouTube")
+
+- **Demo video:** https://youtu.be/HPBQWKxFyMs
 
 ## Overview
 
